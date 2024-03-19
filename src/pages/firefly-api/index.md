@@ -11,7 +11,7 @@ contributors:
 
 Integrate generative AI into your creative workflows.
 
-<Resources slots="heading, links"/>
+<Resources slots="heading, links" sameAsOnThisPage/>
 
 #### Resources
 

@@ -12,17 +12,17 @@
 
 module.exports = {
   pathPrefix: process.env.PATH_PREFIX || '/firefly-services/docs/',
-
-  siteMetadata: {
+  
+  siteMetadata: {    
     pages: [
       {
         title: 'Firefly Services',
         path: '/guides/'
-      },
+      },                  
       {
         title: 'Firefly API',
         description: 'Docs and references for Firefly API',
-        path: '/firefly-api/'
+        path: '/firefly-api/' 
       },
       {
         title: 'Photoshop API',
@@ -35,38 +35,37 @@ module.exports = {
         path: '/lightroom/'
       },
       {
-        title: 'Content Tagging',
-        description: 'Docs and references for Content Tagging services',
-        // path: 'https://experienceleague.adobe.com/docs/experience-platform/intelligent-services/content-commerce-ai/overview.html?aio_internal'
+        title: 'Content Tagging API',
+        description: 'Docs and references for Content Tagging services',        
         path: 'https://experienceleague.adobe.com/docs/experience-platform/intelligent-services/content-commerce-ai/overview.html'
       },
     ],
-    subPages: [
-      // Main Firefly Services docs - left side nav
+    subPages: [  
+      // Main Firefly Services docs - left side nav    
       {
         title: 'Overview',
         path: '/guides/',
       },
       {
         title: 'Getting Started',
-        path: '/guides/get-started.md',
+        path: '/guides/get-started.md',        
       },
       {
         title: 'Tutorials',
-        path: '/guides/tutorials',
+        path: '/guides/tutorials',        
         pages: [
           {
             title: 'Creating Product Images at Scale with Firefly Services',
             path: '/guides/tutorials/create-product-images-with-ff.md'
           },
         ]
-      },
+      },                 
       {
         title: 'SDKs',
         path: '/guides/sdks'
       },
       ///////////////////////////////////////////////
-      // Firefly API-specific left side nav
+      // Firefly API-specific left side nav      
       ///////////////////////////////////////////////
       {
         title: 'Overview',
@@ -139,8 +138,8 @@ module.exports = {
         ]
       },
       {
-        title: 'Release Notes',
-        path: '/firefly-api/guides/release-notes/',
+        title: 'Changelog',
+        path: '/firefly-api/guides/changelog/',
       },
       {
         title: 'Help',
@@ -155,19 +154,19 @@ module.exports = {
             path: '/firefly-api/guides/help/troubleshooting/'
           }
         ]
-      },
+      },         
       // END Firefly API left nav
       ///////////////////////////////////////////////
       // Photoshop API-specific left side nav
-      ///////////////////////////////////////////////
+      /////////////////////////////////////////////// 
       {
         title: 'Overview',
         path: '/photoshop/',
-      },
-      {
-        title: 'Getting Started',
-        path: '/photoshop/getting-started/'
-      },
+      },        
+      // {
+      //   title: 'Getting Started',
+      //   path: '/photoshop/getting-started/'
+      // },
       {
         title: 'General Workflow',
         path: '/photoshop/general-workflow/'
@@ -181,30 +180,86 @@ module.exports = {
         path: '/photoshop/code-sample/'
       },
       {
-        title: 'API Documentation',
-        path: '/photoshop/api/',
+        title: 'API Reference',
+        path: '/photoshop/api/photoshop_actionJSON.md',
         pages: [
           {
-            title: 'Photoshop API',
-            path: '/photoshop/api/'
-          }
+            title: 'Action JSON',
+            path: '/photoshop/api/photoshop_actionJSON.md'
+          },
+          {
+            title: 'Create Action JSON',
+            path: '/photoshop/api/photoshop_actionJSONCreate.md'
+          },
+          {
+            title: 'Create Artboard ',
+            path: '/photoshop/api/photoshop_artboardCreate.md'
+          },
+          {
+            title: 'Remove Background',
+            path: '/photoshop/api/photoshop_cutout.md'
+          },
+          {
+            title: 'Depth Blur',
+            path: '/photoshop/api/photoshop_depthBlur.md'
+          },
+          {
+            title: 'Create Document',
+            path: '/photoshop/api/photoshop_documentCreate.md'
+          },
+          {
+            title: 'Document Manifest',
+            path: '/photoshop/api/photoshop_documentManifest.md'
+          },
+          {
+            title: 'Document Operations',
+            path: '/photoshop/api/photoshop_documentOperations.md'
+          },
+          {
+            title: 'Create Mask',
+            path: '/photoshop/api/photoshop_mask.md'
+          },
+          {
+            title: 'Actions',
+            path: '/photoshop/api/photoshop_photoshopActions.md'
+          },
+          {
+            title: 'Product Crop',
+            path: '/photoshop/api/photoshop_productCrop.md'
+          },
+          {
+            title: 'Create Rendition',
+            path: '/photoshop/api/photoshop_renditionCreate.md'
+          },
+          {
+            title: 'Replace Smart Object',
+            path: '/photoshop/api/photoshop_smartObject.md'
+          },
+          {
+            title: 'Get Document Manifest',
+            path: '/photoshop/api/photoshop_status_documentManifest.md'
+          },
+          {
+            title: 'Get status of Remove background and Create Mask',
+            path: '/photoshop/api/photoshop_status_rbg_createMask.md'
+          },
+          {
+            title: 'Edit Text Layers',
+            path: '/photoshop/api/photoshop_text.md'
+          },
         ]
-      },
-      {
-        title: 'Support',
-        path: '/photoshop/support'
-      },
+      },    
       ///////////////////////////////////////////////
       // Lightroom API-specific left side nav
-      ///////////////////////////////////////////////
+      /////////////////////////////////////////////// 
       {
         title: 'Overview',
         path: '/lightroom/',
-      },
-      {
-        title: 'Getting Started',
-        path: '/lightroom/getting-started/'
-      },
+      },        
+      // {
+      //   title: 'Getting Started',
+      //   path: '/lightroom/getting-started/'
+      // },
       {
         title: 'General Workflow',
         path: '/lightroom/general-workflow/'
@@ -218,31 +273,35 @@ module.exports = {
         path: '/lightroom/code-sample/'
       },
       {
-        title: 'API Documentation',
-        path: '/lightroom/api/',
+        title: 'API Reference',
+        path: '/lightroom/api/lightroom_applyPresets.md',
         pages: [
           {
-            title: 'Lightroom API',
-            path: '/lightroom/api/'
-          },
-          {
-            title: 'Lightroom Auto Straighten',
-            path: '/lightroom/api/lightroom_autoStraighten.md'
-          },
-          {
-            title: 'Lightroom Apply Presets',
+            title: 'Apply Presets',
             path: '/lightroom/api/lightroom_applyPresets.md'
           },
           {
-            title: 'Lightroom Apply XMP',
+            title: 'Apply XMP',
             path: '/lightroom/api/lightroom_applyXMP.md'
           },
+          {
+            title: 'Auto Straighten',
+            path: '/lightroom/api/lightroom_autoStraighten.md'
+          },
+          {
+            title: 'Auto Tone',
+            path: '/lightroom/api/lightroom_autoTone.md'
+          },
+          {
+            title: 'Edits',
+            path: '/lightroom/api/lightroom_edits.md'
+          },
+          {
+            title: 'Get Status',
+            path: '/lightroom/api/lightroom_getStatus.md'
+          }
         ]
-      },
-      {
-        title: 'Support',
-        path: '/lightroom/support'
-      }
+      },    
       // END PS API left nav
       /////////////////////////////////////////////////////
       // TODO: Revisit including a file but one that's flattened, these roll to the API overview root
@@ -250,15 +309,15 @@ module.exports = {
       // {
       //   title: 'Firefly API Overview',
       //   path: '/firefly-api/',
-      //   pages: require("./reference-firefly.js"),
-      // },
-      //
+      //   pages: require("./reference-firefly.js"),   
+      // },        
+      // 
       // {
       //   title: 'Photoshop API Overview',
-      //   path: '/photoshop/',
-      //   pages: require("./reference-photoshop.js"),
+      //   path: '/photoshop/',     
+      //   pages: require("./reference-photoshop.js"),   
       // },
-      /////////////////////////////////////////////////////
+      ///////////////////////////////////////////////////// 
     ]
   },
   plugins: [`@adobe/gatsby-theme-aio`]

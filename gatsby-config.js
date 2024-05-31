@@ -117,24 +117,40 @@ module.exports = {
       },
       {
         title: 'API Reference',
-        path: '/firefly-api/guides/api/upload_image',
+        path: '/firefly-api/guides/api/',
         pages: [
           {
-            title: "Upload",
-            path: "/firefly-api/guides/api/upload_image/"
+            title: "V2",
+            path: "/firefly-api/guides/api/V2/upload_image/",
+            pages: [
+              {
+                title: "Upload",
+                path: "/firefly-api/guides/api/V2/upload_image/"
+              },
+              {
+                title: "Generate Images",
+                path: "/firefly-api/guides/api/V2/image_generation/"
+              },
+              {
+                title: "Expand Image",
+                path: "/firefly-api/guides/api/V2/generative_expand/"
+              },
+              {
+                title: "Fill Image",
+                path: "/firefly-api/guides/api/V2/generative_fill/"
+              }
+            ]
           },
           {
-            title: "Generate Images",
-            path: "/firefly-api/guides/api/image_generation/"
+            title: "V3",
+            path: "firefly-api/guides/api/V3/image_generation/",
+            pages: [
+              {
+                title: "Generate Images",
+                path: "/firefly-api/guides/api/V3/image_generation/"
+              },
+            ]
           },
-          {
-            title: "Expand Image",
-            path: "/firefly-api/guides/api/generative_expand/"
-          },
-          {
-            title: "Fill Image",
-            path: "/firefly-api/guides/api/generative_fill/"
-          }
         ]
       },
       {

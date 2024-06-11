@@ -1,5 +1,5 @@
 ---
-title: Create Your First Firefly API Implementation - Adobe Firefly API
+title: Create Your First Firefly SDK Implementation - Adobe Firefly API
 description: This how-to guides you through the process of integrating Adobe's Firefly workflows into your applications.
 keywords:
   - Adobe Firefly Services
@@ -47,21 +47,45 @@ hideBreadcrumbNav: true
 ---
 # Create Your First Firefly SDK Implementation
 
-For developers wanting to build integrations with Firefly Services, they can choose to directly access the [REST APIs](https://developer.adobe.com/firefly-services/docs/firefly-api/guides/api/upload_image/) in the language of their choice, or try a simpler integration using our [Node SDK](https://developer.adobe.com/firefly-services/docs/guides/sdks/). The SDK simplifies many aspects of working with Firefly Services. Let's take a look at what's required to build your first integration.
+As a developer, you have the flexibility to choose how you want to integrate with Firefly Services, tailoring the experience to your specific needs and preferences. 
 
-## Requirements and Key Details
+## Overview
 
-* As with any use of Firefly Services, developers will need credentials, including both the client ID and secret values. 
-* The SDK supports Node.js and either JavaScript or TypeScript.
-* While this article will focus on Firefly APIs, the SDK also includes Photoshop and Lightroom APIs.
+Whether you prefer the direct control and language-specific implementations provided by [REST APIs](../../firefly-api/guides/api/image_generation/) or the simplified, streamlined approach offered by our [Node SDK](https://developer.adobe.com/firefly-services/docs/guides/sdks/), Firefly Services has you covered.
 
-## Getting Started
+## Choosing the Right Approach for Your Project
+
+* __When to Use REST APIs__: If you need maximum flexibility, detailed control, and are working in a language other than JavaScript/TypeScript, direct REST API access might be the best choice for you.
+
+* __When to Use the Node SDK__: If you're working in a `Node.js` environment and want to simplify the integration process, reduce boilerplate code, and speed up development, the Node SDK is the way to go.
+By offering both direct REST API access and a Node SDK, Firefly Services ensures that you have the tools you need to build powerful integrations in the way that best suits your workflow. 
+
+Let's explore what you need to get started with your first integration.
+
+The SDK supports Node.js and either JavaScript or TypeScript. While this article will focus on Firefly APIs, the SDK also includes Photoshop and Lightroom APIs.
+
+## Pre-requisites
+
+* You will need a set of credentials for Firefly Services. You can get those [here](../get-started.md).
+
+## The Workflow
+
+Before digging into the code, let's break down the process.
+
+1. Add the SDK packages
+2. Setting up authentication
+3. Instantiate Firefly
+4. Generating an Image with a Prompt
+5. Download the Results
+
+
+## Step 1: Add the SDK packages
 
 Let's begin by initializing a new `package.json` in your prompt with `npm init -y`. 
 
 Next, we need to add the SDK. As described in the SDK's [readme](https://github.com/Firefly-Services/firefly-services-sdk-js), there are four individual packages you *can* install:
 
-* The "common APIs" package is required for authentication, you'll always need this.
+* The `common APIs` package is required for authentication, you'll always need this.
 * A package for Firefly APIs.
 * A package for Photoshop APIs.
 * A package for Lightroom APIs.
@@ -95,7 +119,7 @@ Lastly, in order to use top-level await and imports, add a `type` setting of `mo
 }
 ```
 
-## Setting up Authentication
+## Step 2: Setting up Authentication
 
 Let's begin with a simple example, generating an image from a prompt. Our code needs to begin with authentication. Currently, authentication requires creating a utility function that returns an "auth provider" object. This is a bit complex, but can also be taken directly from the SDK's documentation.
 
@@ -124,7 +148,7 @@ const config = {
 
 In the code above, we've created an `authProvider` object using our client ID and secret values as defined in two environment variables, `CLIENT_ID` and `CLIENT_SECRET`. This is wrapped up in a new object, `config`, that includes the `authProvider` as well as the client ID values.
 
-## Instantiating Firefly
+## Step 3: Instantiate Firefly
 
 The next part is much more simple, creating an instance of the Firefly SDK:
 
@@ -134,7 +158,7 @@ import { FireflyClient } from '@adobe/firefly-apis';
 const firefly = new FireflyClient(config);
 ```
 
-## Generating an Image with a Prompt
+## Step 4: Generating an Image with a Prompt
 
 With authentication done and the Firefly client created, how do we generate images for a prompt? It takes all of one line! 
 
@@ -187,7 +211,7 @@ Here's the JSON returned in the `result` key:
 }
 ```
 
-## Downloading the Results
+## Step 5: Download the Results
 
 Currently, the SDK doesn't support downloading the images for you, but this can be done with a few lines of code. Here's the required import and a basic utility function to download a URL to a path:
 
@@ -252,15 +276,15 @@ for(let output of resp.result.outputs) {
 
 And here's one of the sample results of our prompt:
 
-![Generated image](../images/shot1.png)
+![Generated image](..//images/shot1.jpg)
 
-## Working with Reference Images
+## Additional workflow: Working with Reference Images
 
 One of the benefits of having a Firefly SDK is how easy it is to build more complex workflows. To demonstrate a simple example of this, let's enhance our simple text-to-image prompt example by using a reference image. Reference images help guide the visual style of the generated result. 
 
 In order for this to work, we first need our reference image. We'll use this:
 
-![Source image]
+[Source image](..//images/source_image.jpg)
 
 Skipping over the authentication bits we've already covered, the first change is to upload our reference image:
 
@@ -294,8 +318,8 @@ const resp = await firefly.generateImages({
 
  Compared to the previous version, we've added the `styles` attribute and passed in the `referenceImage` value. The changes to the generated images are immediately recognizable as being based on the style of the reference image. 
 
- ![Second generated image](../images/shot2.png)
+ ![Second generated image](../images/shot2.jpg)
 
- ## Next Steps
+## Next Steps
 
- Now that you've seen how the SDK can *greatly* simplify your Firefly Services workflows, take a look over that [Github repository](https://github.com/Firefly-Services/firefly-services-sdk-js) and check out the docs and other samples as well.
+Now that you've seen how the SDK can *greatly* simplify your Firefly Services workflows, take a look over that [Github repository](https://github.com/Firefly-Services/firefly-services-sdk-js) and check out the docs and other samples as well.

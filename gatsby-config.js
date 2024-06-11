@@ -58,6 +58,10 @@ module.exports = {
             title: 'Creating Product Images at Scale with Firefly Services',
             path: '/guides/tutorials/create-product-images-with-ff.md'
           },
+          {
+            title: 'Create Your First Firefly SDK Implementation',
+            path: '/guides/tutorials/create-your-first-sdk-implementation.md'
+          }
         ]
       },                 
       {

@@ -83,21 +83,21 @@ Before digging into the code, let's break down the process.
 
 Let's begin by initializing a new `package.json` in your prompt with `npm init -y`. 
 
-Next, we need to add the SDK. As described in the SDK's [readme](https://github.com/Firefly-Services/firefly-services-sdk-js), there are four individual packages you *can* install:
+Next, we need to add the SDK. As described in the SDK's [readme](https://git.corp.adobe.com/cc-apis/firefly-services-sdk-js/), there are four individual packages you _can_ install:
 
-* The `common APIs` package is required for authentication, you'll always need this.
-* A package for Firefly APIs.
-* A package for Photoshop APIs.
-* A package for Lightroom APIs.
+-   The `common APIs` package is required for authentication, you'll always need this.
+-   A package for Firefly APIs.
+-   A package for Photoshop APIs.
+-   A package for Lightroom APIs.
 
 For our needs, we only require the common and Firefly APIs. Install them like so:
 
 ```bash
-npm install @adobe/firefly-services/common-apis
-npm install @adobe/firefly-services/firefly-apis
+npm install @adobe/firefly-services-common-apis
+npm install @adobe/firefly-apis
 ```
 
-Lastly, in order to use top-level await and imports, add a `type` setting of `module` to your package.json. Here's a complete example for reference:
+Lastly, in order to use top-level await and imports, add a `type` setting of `module` to your package.json. Here's a complete example for reference:
 
 ```json
 {
@@ -121,32 +121,20 @@ Lastly, in order to use top-level await and imports, add a `type` setting of `mo
 
 ## Step 2: Setting up Authentication
 
-Let's begin with a simple example, generating an image from a prompt. Our code needs to begin with authentication. Currently, authentication requires creating a utility function that returns an "auth provider" object. This is a bit complex, but can also be taken directly from the SDK's documentation.
+Let's begin with a simple example, generating an image from a prompt. Our code needs to begin with authentication and creating the Firefly object:
 
 ```js
-import { ServerToServerTokenProvider } from '@adobe/firefly-services-common-apis';
+import { FireflyClient } from '@adobe/firefly-apis';
 
-function getAuthProvider(clientId, clientSecret, scopes) {
-    const serverToServerAuthDetails = { 
-        clientId,
-        clientSecret,
-        scopes 
-    };
-    const serverToServerAuthOptions = {
-        autoRefresh: true
-    }
-    return new ServerToServerTokenProvider(serverToServerAuthDetails, serverToServerAuthOptions);
-}
-
-// create auth config
-const authProvider = getAuthProvider(process.env.CLIENT_ID, process.env.CLIENT_SECRET, 'openid,AdobeID,firefly_enterprise,firefly_api,ff_apis'); 
-const config = {
-    tokenProvider: authProvider,
-    clientId: process.env.CLIENT_ID 
+const authOptions = {
+    autoRefresh: true,
+    serviceEnvironment:'stage'
 };
+
+const firefly = await FireflyClient.createWithCredentials(process.env.CLIENT_ID, process.env.CLIENT_SECRET, authOptions);
 ```
 
-In the code above, we've created an `authProvider` object using our client ID and secret values as defined in two environment variables, `CLIENT_ID` and `CLIENT_SECRET`. This is wrapped up in a new object, `config`, that includes the `authProvider` as well as the client ID values.
+In the code above, we use two environment variables (`CLIENT_ID` and `CLIENT_SECRET`) and pass them to the `createWithCredentials` method. Note that for the bug bash, the `authOptions` object specified above is required.
 
 ## Step 3: Instantiate Firefly
 
@@ -160,54 +148,31 @@ const firefly = new FireflyClient(config);
 
 ## Step 4: Generating an Image with a Prompt
 
-With authentication done and the Firefly client created, how do we generate images for a prompt? It takes all of one line! 
+With authentication done and the Firefly client created, how do we generate images for a prompt? It takes all of one line!
 
 ```js
-const resp = await firefly.generateImages({prompt:'a cat riding a unicorn headed into the sunset, dramatic pose', n:4});
+const resp = await firefly.generateImages({prompt:'a cat riding a unicorn headed into the sunset, dramatic pose'});
 ```
 
-As a reminder, the Firefly API can accept *many* parameters, and they're all supported by the SDK, but in this case, we've passed just a prompt and the number of images required. The result of the SDK call is twofold - first a `result` JSON object that matches what the REST API returns, and secondly a set of `headers` you can inspect if needed.
+As a reminder, the Firefly API can accept _many_ parameters, and they're all supported by the SDK, but in this case, we have passed just a prompt and the number of images required. The result of the SDK call is twofold - first a `result` JSON object that matches what the REST API returns, and secondly a set of `headers` you can inspect if needed.
 
-Here's the JSON returned in the `result` key:
+Here's the JSON returned in the `result` key:
 
 ```json
 {
-	"version": "2.10.3",
-	"size": {
-		"width": 2048,
-		"height": 2048
-	},
-	"predictedContentClass": "art",
-	"outputs": [
-		{
-			"seed": 312577738,
-			"image": {
-				"id": "752f756f-f3b0-44d5-9ca5-c805628813fe",
-				"presignedUrl": "https://pre-signed-firefly-prod.s3.amazonaws.com/images/752f756f-f3b0-44d5-9ca5-c805628813fe?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIARDA3TX66CSNORXF4%2F20240429%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20240429T170605Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=7a02b554651d28e1971019de0cdc263ada189ea1bc7d7c7da7879517b1e75723"
-			}
-		},
-		{
-			"seed": 1089286377,
-			"image": {
-				"id": "ee062ccc-45ae-4d17-a6e5-a281a3b69d3f",
-				"presignedUrl": "https://pre-signed-firefly-prod.s3.amazonaws.com/images/ee062ccc-45ae-4d17-a6e5-a281a3b69d3f?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIARDA3TX66CSNORXF4%2F20240429%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20240429T170605Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=ef155784ffdfa0509d634681fcaf7fe670d1739029055d9f916d7865d3794478"
-			}
-		},
-		{
-			"seed": 2002836438,
-			"image": {
-				"id": "4936ff55-8c8f-489c-be95-ff0e00bf75bd",
-				"presignedUrl": "https://pre-signed-firefly-prod.s3.amazonaws.com/images/4936ff55-8c8f-489c-be95-ff0e00bf75bd?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIARDA3TX66CSNORXF4%2F20240429%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20240429T170605Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=a6053959373cbcf5e471658b042d334ebed352e55ff5d932e8301e8fca78fb5e"
-			}
-		},
-		{
-			"seed": 1011733134,
-			"image": {
-				"id": "62daaf9a-08ec-45f0-9985-573635c371b0",
-				"presignedUrl": "https://pre-signed-firefly-prod.s3.amazonaws.com/images/62daaf9a-08ec-45f0-9985-573635c371b0?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIARDA3TX66CSNORXF4%2F20240429%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20240429T170605Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=ae5635a67c7a32ba52ea3e2015242d430dce70e2de8bbb4e840614970cacf84a"
-			}
-		}
-	]
+        "size": {
+                "width": 2048,
+                "height": 2048
+        },
+        "outputs": [
+                {
+                        "seed": 85987617,
+                        "image": {
+                                "url": "https://pre-signed-firefly-stage.s3-accelerate.amazonaws.com/images/2df5e7ac-cd6a-42c1-b407-e9c316006a55?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA55EBG7KCZFCHQDZT%2F20240606%2Fus-west-2%2Fs3%2Faws4_request&X-Amz-Date=20240606T144529Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=cbcdb705aa5f2ceeefb524c31b96715381f1f8e5980126f5051b7b289bfc31e3"
+                        }
+                }
+        ],
+        "contentClass": "photo"
 }
 ```
 
@@ -228,7 +193,7 @@ async function downloadFile(url, filePath) {
 }
 ```
 
-To put it all together, here's a complete script that handles the authentication, generating images based on our prompt, and then saving each result to the file system using the results `seed` value.
+To put it all together, here's a complete script that handles the authentication, generating images based on our prompt, and then saving each result to the file system using the results `seed` value.
 
 ```js
 import fs from 'fs';
@@ -236,7 +201,6 @@ import { Readable } from 'stream';
 import { finished } from 'stream/promises';
 
 import { FireflyClient } from '@adobe/firefly-apis';
-import { ServerToServerTokenProvider } from '@adobe/firefly-services-common-apis';
 
 async function downloadFile(url, filePath) {
 	let res = await fetch(url);
@@ -245,33 +209,20 @@ async function downloadFile(url, filePath) {
 	return await finished(body.pipe(download_write_stream));
 }
 
-function getAuthProvider(clientId, clientSecret, scopes) {
-    const serverToServerAuthDetails = { 
-        clientId,
-        clientSecret,
-        scopes 
-    };
-    const serverToServerAuthOptions = {
-        autoRefresh: true
-    }
-    return new ServerToServerTokenProvider(serverToServerAuthDetails, serverToServerAuthOptions);
-}
-
-// create auth config
-const authProvider = getAuthProvider(process.env.CLIENT_ID, process.env.CLIENT_SECRET, 'openid,AdobeID,firefly_enterprise,firefly_api,ff_apis'); 
-const config = {
-    tokenProvider: authProvider,
-    clientId: process.env.CLIENT_ID 
+const authOptions = {
+    autoRefresh: true,
+    serviceEnvironment:'stage'
 };
 
-const firefly = new FireflyClient(config);
+const firefly = await FireflyClient.createWithCredentials(process.env.CLIENT_ID, process.env.CLIENT_SECRET, authOptions);
 
 const resp = await firefly.generateImages({prompt:'a cat riding a unicorn headed into the sunset, dramatic pose', n:4});
 
 for(let output of resp.result.outputs) {
 	let fileName = `./${output.seed}.jpg`;
-	await downloadFile(output.image.presignedUrl, fileName);
+	await downloadFile(output.image.url, fileName);
 }
+
 ```
 
 And here's one of the sample results of our prompt:
@@ -280,19 +231,19 @@ And here's one of the sample results of our prompt:
 
 ## Additional workflow: Working with Reference Images
 
-One of the benefits of having a Firefly SDK is how easy it is to build more complex workflows. To demonstrate a simple example of this, let's enhance our simple text-to-image prompt example by using a reference image. Reference images help guide the visual style of the generated result. 
+One of the benefits of having a Firefly SDK is how easy it is to build more complex workflows. To demonstrate a simple example of this, let's enhance our simple text-to-image prompt example by using a reference image. Reference images help guide the visual style of the generated result.
 
 In order for this to work, we first need our reference image. We'll use this:
 
-![Source image](../images/source_image.jpg)
+![](https://wiki.corp.adobe.com/download/attachments/3209308328/image-2024-6-6_3-31-0.png?version=1&modificationDate=1717659061540&api=v2)
 
-Skipping over the authentication bits we've already covered, the first change is to upload our reference image:
+Skipping over the authentication bits we have already covered, the first change is to upload our reference image:
 
 ```js
 const uploadResp = await firefly.upload(new Blob([await fs.readFile('./source_image.jpg')],{type:'image/jpeg'}));
 ```
 
-The `upload` SDK method requires a Blob which we've used wrapped around a file read on `./source_image.jpg`. As with the previous SDK example, the response includes a JSON result as well as the headers, with the JSON matching what you get when using the REST API. As an example:
+The `upload` SDK method requires a Blob which we have used wrapped around a file read on `./source_image.jpg`. As with the previous SDK example, the response includes a JSON result as well as the headers, with the JSON matching what you get when using the REST API. As an example:
 
 ```json
 {
@@ -308,18 +259,20 @@ Using that reference when generating images looks like so:
 
 ```js
 const resp = await firefly.generateImages({
-    prompt:'a cat riding a unicorn headed into the sunset, dramatic pose', 
-    styles: {
-        referenceImage: { id:uploadResp.result.images[0].id } 
-    },
-	n:4
- });
- ```
+    prompt:'a cat riding a unicorn headed into the sunset, dramatic pose',      style: {
+        imageReference: {
+            source: {
+                uploadId:uploadResp.result.images[0].id
+            }
+        }
+    }
+});
+```
 
-Compared to the previous version, we've added the `styles` attribute and passed in the `referenceImage` value. The changes to the generated images are immediately recognizable as being based on the style of the reference image. 
+Compared to the previous version, we have added the `style` attribute and passed in the `imageReference` value. The changes to the generated images are immediately recognizable as being based on the style of the reference image.
 
 ![Second generated image](../images/shot2.jpg)
 
 ## Next Steps
 
-Now that you've seen how the SDK can *greatly* simplify your Firefly Services workflows, take a look over that [Github repository](https://github.com/Firefly-Services/firefly-services-sdk-js) and check out the docs and other samples as well.
+Now that you've seen how the SDK can \*greatly\* simplify your Firefly Services workflows, take a look over that \[Github repository\]([https://github.com/Firefly-Services/firefly-services-sdk-js](https://github.com/Firefly-Services/firefly-services-sdk-js)) and check out the docs and other samples as well.

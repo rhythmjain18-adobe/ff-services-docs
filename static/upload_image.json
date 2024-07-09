@@ -7,7 +7,7 @@
   },
   "servers": [
     {
-      "url": "https://firefly-api.adobe.io"
+      "url": "https://firefly-api-enterprise-stage.adobe.io"
     }
   ],
   "security": [

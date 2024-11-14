@@ -6,7 +6,7 @@ keywords:
   - Photoshop API features
 contributors:
   - https://github.com/archyposada
-   - https://github.com/khound
+  - https://github.com/khound
 hideBreadcrumbNav: true
 ---
 

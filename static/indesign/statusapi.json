@@ -1,0 +1,252 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "description": "Firefly Service's RESTful InDesign APIs offer resources to automate tedious, time-consuming design tasks through scalable cloud services,  encouraging more personalization at scale, creative automation,  and faster content delivery.  ",
+    "version": "0.1.0",
+    "title": "Firefly Services - InDesign APIs",
+    "contact": {
+      "email": "idservices@adobe.com"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://indesign.adobe.io"
+    }
+  ],
+  "security": [
+    {
+      "ApiKeyAuth": []
+    },
+    {
+      "BearerAuth": []
+    }
+  ],
+  "tags": [
+    {
+      "name": "Status API",
+      "description": "The Status API checks the latest status of an executed script for any InDesign API."
+    }
+  ],
+  "paths": {
+    "/v3/status/{id}": {
+      "get": {
+        "summary": "Get the status of a job",
+        "description": "Return the latest status of a job that has been executed.",
+        "parameters": [
+          {
+            "name": "x-gw-ims-org-id",
+            "in": "header",
+            "description": "This is the identifier for Adobe Identity Management Service (IMS) as defined in Adobe's developer console. This is optional.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-api-key",
+            "in": "header",
+            "description": "The API key as defined in Adobe's developer console.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "The authorization token with bearer \"token_value\".",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The ID of the job you want to see the status of.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Status of a capability execution.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/notstartedEvent"
+                    },
+                    {
+                      "$ref": "#/components/schemas/runningEvent"
+                    },
+                    {
+                      "$ref": "#/components/schemas/succeededEvent"
+                    },
+                    {
+                      "$ref": "#/components/schemas/failedEvent"
+                    }
+                  ]
+                }
+              }
+            },
+            "headers": {
+              "retry-after": {
+                "schema": {
+                  "type": "integer"
+                },
+                "description": "The number of seconds until the user should try again."
+              },
+              "Content-Type": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "The type of content returned (e.g., `application/json`)."
+              },
+              "Content-Length": {
+                "schema": {
+                  "type": "integer"
+                },
+                "description": "The length of the response."
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "ApiKeyAuth": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "x-api-key"
+      },
+      "BearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    },
+    "schemas": {
+      "BaseEvent": {
+        "type": "object",
+        "description": "The job event response object.",
+        "properties": {
+          "jobId": {
+            "description": "The GUID for the job.",
+            "type": "string"
+          }
+        }
+      },
+      "notstartedEvent": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BaseEvent"
+          },
+          {
+            "description": "The status when a job is in queued state.",
+            "type": "object",
+            "properties": {
+              "status": {
+                "type": "string",
+                "description": "The current state of the job.",
+                "enum": [
+                  "not_started"
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "runningEvent": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BaseEvent"
+          },
+          {
+            "description": "Job is in running state.",
+            "type": "object",
+            "properties": {
+              "status": {
+                "type": "string",
+                "description": "The current state of the job.",
+                "enum": [
+                  "running"
+                ]
+              },
+              "message": {
+                "type": "string",
+                "description": "A description of the current running state."
+              }
+            }
+          }
+        ]
+      },
+      "succeededEvent": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BaseEvent"
+          },
+          {
+            "description": "The job has succeeded.",
+            "type": "object",
+            "properties": {
+              "status": {
+                "type": "string",
+                "description": "The current state of the job.",
+                "enum": [
+                  "succeeded"
+                ]
+              },
+              "data": {
+                "type": "object",
+                "description": "The output response from the current state of the job."
+              },
+              "dataURL": {
+                "type": "string",
+                "description": "The data returned from the execution of the capability. If the data size is between 250 KB and 20 MB, it will be provided as a pre-signed URL. If it is larger than 20 MB, the job will fail."
+              },
+              "outputs": {
+                "type": "object",
+                "description": "A list of URLs for all the generated assets."
+              }
+            }
+          }
+        ]
+      },
+      "failedEvent": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/BaseEvent"
+          },
+          {
+            "description": "The job is in a failed state.",
+            "type": "object",
+            "properties": {
+              "status": {
+                "type": "string",
+                "description": "The current state of the job.",
+                "enum": [
+                  "failed"
+                ]
+              },
+              "error_code": {
+                "type": "string",
+                "description": "The error code for the failure."
+              },
+              "message": {
+                "type": "string",
+                "description": "The error message for the failure."
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}

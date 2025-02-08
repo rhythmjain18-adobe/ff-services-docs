@@ -21,3 +21,5 @@ The InDesign APIs currently offered are:
 - [Data Merge API](./api/datamerge.md) - Creates multiple document variations from CSV data and an InDesign file.
 - [Rendition API](./api/rendition.md) -  Creates renditions of a file in either PNG, JPG, or PDF format.
 - [Custom Capabilities API](./api/capabilities.md) - Perform almost any InDesign task using a custom script. With this API you can submit and execute custom capabilites. This is currently in beta.
+- [Status API](./api/status.md) - Checks the latest status of an executed script for any InDesign API.
+  

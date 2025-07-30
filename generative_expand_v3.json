@@ -21,6 +21,7 @@
         "post": {
             "summary": "Expand Image - Model 3",
             "operationId": "expandImage",
+            "deprecated": true,
             "description": "Change the aspect ratio or size of an image and expand it. You can optionally provide a text prompt and Firefly generates additional filler image based on the prompt. For example, you can add a prompt to as Firefly to generate pine trees and a forest landscape which fills empty parts of the newly expanded image.",
             "requestBody": {
               "content": {
@@ -338,7 +339,7 @@
                   }
                 ],
                 "title": "Input image",
-                "description": "The image to be expanded. You can either use a <code>url</code> or an <code>uploadId</code> as the source for the uploaded image.  \n  <strong>Note</strong>: Only allow listed domains are allowed to be accepted as input URL in the request. The allow-listed domains are as follows:  \n  <ul><li><code>amazonaws.com</code></li><li><code>windows.net</code></li><li><code>dropboxusercontent.com</code></li></ul>"
+                "description": "The image to be expanded. Use a <code>url</code> or an <code>uploadId</code> as the source for the uploaded image.  \n  <strong>Note</strong>: Only these listed domains are accepted in the request:  \n  <ul><li><code>amazonaws.com</code></li><li><code>windows.net</code></li><li><code>dropboxusercontent.com</code></li><li><code>storage.googleapis.com</code></li></ul>"
               },
               "placement": {
                 "allOf": [

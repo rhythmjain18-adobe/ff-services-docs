@@ -21,6 +21,7 @@
         "post": {
             "summary": "Generate Similar Images - Model 3",
             "operationId": "generateSimilarImages",
+            "deprecated": true,
             "description": "Generate similar images based on a reference image that you provide as a parameter.",
             "requestBody": {
               "content": {
@@ -283,7 +284,7 @@
                   }
                 ],
                 "title": "Source image",
-                "description": "Source of the reference image used to generate similar images. You can either use a <code>url</code> or an <code>uploadId</code> as the source for the uploaded image.  \n  <strong>Note</strong>: Only allow listed domains are allowed to be accepted as input URL in the request. The allow-listed domains are as follows:  \n  <ul><li><code>amazonaws.com</code></li><li><code>windows.net</code></li><li><code>dropboxusercontent.com</code></li></ul>"
+                "description": "Source of the reference image used to generate similar images. Use a <code>url</code> or an <code>uploadId</code> as the source for the uploaded image.  \n  <strong>Note</strong>: Only these listed domains are accepted as input URL in the request. The allow-listed domains are as follows:  \n  <ul><li><code>amazonaws.com</code></li><li><code>windows.net</code></li><li><code>dropboxusercontent.com</code></li><li><code>storage.googleapis.com</code></li></ul>"
               }
             },
             "type": "object",
@@ -343,12 +344,6 @@
                 ],
                 "title": "Reference image",
                 "description": "Firefly will generate similar variations based on the reference input image. Supported formats are, image/jpeg, image/png, image/webp. "
-              },
-              "tileable": {
-                "type": "boolean",
-                "title": "Output image tileability",
-                "description": "An image is tileable if it can be repeated infinitely in any direction without showing visible seams or edges.",
-                "default": false          
               }
             },
             "type": "object",

@@ -1465,9 +1465,10 @@
             "title": "Result"
           },
           "status": {
-            "description": "The status of the job. One of 'pending', 'running', 'completed', 'failed', 'canceled'.",
+            "description": "The status of the job.",
             "title": "Status of the job",
-            "type": "string"
+            "type": "string",
+            "enum": ["pending", "running", "succeeded", "failed", "canceled"]
           }
         },
         "required": [
@@ -2136,16 +2137,6 @@
       },
       "InputImageV3": {
         "properties": {
-          "mask": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/PublicBinaryInputV3"
-              }
-            ],
-            "deprecated": true,
-            "description": "This is a deprecated property. Use <code>mask</code> instead.",
-            "title": "Deprecated mask image"
-          },
           "source": {
             "$ref": "#/components/schemas/PublicBinaryInputV3",
             "description": "Source image that Firefly expands, fills or uses to generate similar images",
